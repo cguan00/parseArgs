@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 
 // Use the following header: char ** parse_args( char * line );
@@ -16,42 +17,22 @@
 //     The original string is correctly formatted
 
 
-char ** parse_args( char * line ){
-  int args = 5;
-  char ** output = calloc (args, sizeof(char*));
-
-  output[0] = "";
-  output[1] = "";
-  output[2] = "";
-  output[3] = "";
-  output[4] = "";
-
-  for(; args -=1; args > 0 ){
-    while(&line != NULL){
-
-    }
+char ** parse_args(char * line){
+  char ** output = malloc (5 * sizeof(char*));
+  char *current = line;
+  int i = 0;
+  while (current != NULL){
+    output[i] = strsep(&current, " ");
+    i++;
   }
-  while(&line != NULL){
-
-  }
-  output[0] = strsep(&line, " ");
-  output[0] = strsep(&line, " ");
-  output[0] = strsep(&line, " ");
-  output[0] = strsep(&line, " ");
-  output[0] = strsep(&line, " ");
-
-
-  printf("%s\n", line);
+  output[i] = NULL;
   return output;
 }
 
 int main(){
-  char *input = "ls -a -l";
-  parse_args(input);
-
-  char line[100] = "woah-this-is-cool";
-  char *s1 = line;
-  printf("[%s]\n", strsep( &s1, "-" ));
-  printf("[%s]\n", s1);
+  char line[100] = "ls -a -l";
+  char *input = line;
+  char ** args = parse_args(input);
+  execvp(args[0], args);
   return 0;
 }
